@@ -32,33 +32,6 @@ from database.db_premium import *
 
 
 BAN_SUPPORT = f"{BAN_SUPPORT}"
-TUT_VID = f"{TUT_VID}"
-
-async def short_url(client: Client, message: Message, base64_string):
-    try:
-        prem_link = f"https://t.me/{client.username}?start=yu3elk{base64_string}"
-        short_link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API, prem_link)
-
-        buttons = [
-            [
-                InlineKeyboardButton(text="ᴅᴏᴡɴʟᴏᴀᴅ", url=short_link),
-                InlineKeyboardButton(text="ᴛᴜᴛᴏʀɪᴀʟ", url=TUT_VID)
-            ],
-            [
-                InlineKeyboardButton(text="ᴘʀᴇᴍɪᴜᴍ", callback_data="premium")
-            ]
-        ]
-
-        await message.reply_photo(
-            photo=SHORTENER_PIC,
-            caption=SHORT_MSG.format(
-            ),
-            reply_markup=InlineKeyboardMarkup(buttons),
-        )
-
-    except IndexError:
-        pass
-
 
 @Bot.on_message(filters.command('start') & filters.private)
 async def start_command(client: Client, message: Message):
@@ -91,23 +64,21 @@ async def start_command(client: Client, message: Message):
         except:
             pass
 
-    # Handle normal message flow
     text = message.text
-
     if len(text) > 7:
         try:
-            basic = text.split(" ", 1)[1]
-            if basic.startswith("yu3elk"):
-                base64_string = basic[6:-1]
-            else:
-                base64_string = basic
-
-            if not is_premium and user_id != OWNER_ID and not basic.startswith("yu3elk"):
-                await short_url(client, message, base64_string)
-                return
-
-        except Exception as e:
-            print(f"Error processing start payload: {e}")
+            base64_string = text.split(" ", 1)[1]
+        except:
+            return
+        string = await decode(base64_string)
+        if string.startswith("premium"):
+            if not await is_premium_user(message.from_user.id):
+                return await message.reply_text(
+                    f"Buy premium to access this content\nTo Buy Contact @{OWNER}",
+                    reply_markup=InlineKeyboardMarkup(
+                        [[InlineKeyboardButton("Buy Premium", callback_data="premium")]]
+                    )
+                )
 
         string = await decode(base64_string)
         argument = string.split("-")
