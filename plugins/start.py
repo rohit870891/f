@@ -109,7 +109,7 @@ async def start_command(client: Client, message: Message):
         except Exception as e:
             print(f"Error processing start payload: {e}")
 
-        string = await decode(base64_string)
+        string = await decode(basic)
         argument = string.split("-")
 
         ids = []
