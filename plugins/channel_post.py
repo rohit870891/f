@@ -34,14 +34,25 @@ async def channel_post(client: Client, message: Message):
     converted_id = post_message.id * abs(client.db_channel.id)
     string = f"get-{converted_id}"
     base64_string = await encode(string)
-    link = f"https://t.me/{client.username}?start={base64_string}"
+    link = f"https://telegram.me/{client.username}?start={base64_string}"
 
-    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]])
+    string = f"get-{converted_id}"
+    string = string.replace("get-", "premium-")
+    base64_string = await encode(string)
+    link1 = f"https://telegram.me/{client.username}?start={base64_string}"
 
-    await reply_text.edit(f"<b>Here is your link</b>\n\n{link}", reply_markup=reply_markup, disable_web_page_preview = True)
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("Public Link", url=link)],
+            [InlineKeyboardButton("Premium User", url=link1)]
+        ]
+    )
 
-    if not DISABLE_CHANNEL_BUTTON:
-        await post_message.edit_reply_markup(reply_markup)
+    await reply_text.edit(
+        "<b>> Your Links</b>",
+        disable_web_page_preview=True,
+        reply_markup=keyboard
+    )
 
 # Don't Remove Credit @CodeFlix_Bots, @rohit_1888
 # Ask Doubt on telegram @CodeflixSupport
