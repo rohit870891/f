@@ -100,7 +100,7 @@ async def start_command(client: Client, message: Message):
             if basic.startswith("yu3elk"):
                 base64_string = basic[6:-1]
             else:
-                base64_string = basic
+                base64_string = text.split(" ", 1)[1]
 
             if not is_premium and user_id != OWNER_ID and not basic.startswith("yu3elk"):
                 await short_url(client, message, base64_string)
@@ -109,7 +109,7 @@ async def start_command(client: Client, message: Message):
         except Exception as e:
             print(f"Error processing start payload: {e}")
 
-        string = await decode(basic)
+        string = await decode(base64_string)
         argument = string.split("-")
 
         ids = []
