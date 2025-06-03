@@ -2,7 +2,7 @@ import requests
 #from config import TERABOX_EMAIL, TERABOX_PASSWORD
 
 TERABOX_EMAIL = "gurugaming385@gmail.com"
-TERABOX_PASAWORD = "Aquib#4154"
+TERABOX_PASSWORD = "Aquib#4154"
 
 def login_and_get_cookies():
     session = requests.Session()
